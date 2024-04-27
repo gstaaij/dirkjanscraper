@@ -55,18 +55,24 @@ class DirkjanHTMLParser(HTMLParser):
         else:
             initialUrlSplit = self.initialUrl.split("/")
             path = ""
+            year = ""
+            month = ""
+            day = ""
             for urlPart in initialUrlSplit:
                 try:
                     if (len(urlPart) > 0 and int(urlPart[0]) >= 2):
-                        path = urlPart[:4] + "/" + urlPart[4:6] + "/" + urlPart[6:8]
+                        year = urlPart[:4]
+                        month = urlPart[4:6]
+                        day = urlPart[6:8]
                 except ValueError as e:
                     pass
-            if (path == ""):
+            if (year == ""):
                 print(f"Something went wrong trying to download {self.initialUrl}")
                 return
-            path = BASE_PATH + "/" + path
+            path = BASE_PATH + f"/{year}/{month}"
             os.makedirs(path, exist_ok=True)
-            path += "/" + self.currentImageURL.split("/")[-1]
+            extension = self.currentImageURL.split("/")[-1].split(".")[-1]
+            path += f"/dirkjan_{year}{month}{day}.{extension}"
             if (os.path.exists(path)):
                 print(f"{path} exists. Skipping...")
                 return
