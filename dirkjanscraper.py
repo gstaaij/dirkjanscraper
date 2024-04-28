@@ -111,7 +111,12 @@ class DirkjanHTMLParser(HTMLParser):
 
 def main():
     # Open the URL and run the HTML parser with recursion
-    with request.urlopen("https://dirkjan.nl/cartoon") as response:
+    with request.urlopen("https://dirkjan.nl") as response:
+        dhtmlparser = DirkjanHTMLParser(True)
+        dhtmlparser.feed(str(response.read()))
+        dhtmlparser.download_images()
+    # For some reason this URL is ahead of the homepage URL as of 2024-04-28 ¯\_(ツ)_/¯
+    with request.urlopen("https://dirkjan.nl/cartoon/") as response:
         dhtmlparser = DirkjanHTMLParser(True)
         dhtmlparser.feed(str(response.read()))
         dhtmlparser.download_images()
